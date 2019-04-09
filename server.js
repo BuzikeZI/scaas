@@ -27,7 +27,7 @@ client.connect(err => {
   //     console.log('success');
   // })
 
-  const server = app.listen(8080, function () {
+  const server = app.listen(3000, function () {
  
     let host = server.address().address
     let port = server.address().port
@@ -35,6 +35,11 @@ client.connect(err => {
     console.log("App listening at http://%s:%s", host, port); 
   })
 
+  app.get('/',(req,res)=>{
+    res.send('hihihi');
+  })
+  
+  
   app.get("/api/schedules",(req,res)=>{
     collection.find({}).toArray((err,docs)=>{
       if(err){
