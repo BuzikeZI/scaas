@@ -7,12 +7,12 @@ const nodemailer = require('nodemailer');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const cors = require('cors')
-const corsOptions = {
-  origin: 'http://localhost:4200',
-  optionsSuccessStatus: 200
-}
-app.use(cors(corsOptions))
+// const cors = require('cors')
+// const corsOptions = {
+//   origin: 'http://localhost:4200',
+//   optionsSuccessStatus: 200
+// }
+// app.use(cors(corsOptions))
  
 let router = require('./app/routers/s3.router.js');
 app.use('/', router);
@@ -22,7 +22,7 @@ const uri = "mongodb+srv://Jim:$Zyf1989528@scheduledb-2yn2v.mongodb.net/test?ret
 const client = new MongoClient(uri, { useNewUrlParser: true });
 client.connect(err => {
   const collection = client.db("test").collection("devices");
-  let myObj = {name:"Joey"};
+  // let myObj = {name:"Joey"};
   // collection.insertOne(myObj,(err,res)=>{
   //     console.log('success');
   // })
@@ -39,7 +39,7 @@ client.connect(err => {
     res.send('hihihi');
   })
   
-  
+
   app.get("/api/schedules",(req,res)=>{
     collection.find({}).toArray((err,docs)=>{
       if(err){
