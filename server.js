@@ -7,12 +7,12 @@ const nodemailer = require('nodemailer');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// const cors = require('cors')
-// const corsOptions = {
-//   origin: 'http://localhost:4200',
-//   optionsSuccessStatus: 200
-// }
-// app.use(cors(corsOptions))
+const cors = require('cors')
+const corsOptions = {
+  origin: 'http://localhost:4200',
+  optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions))
  
 let router = require('./app/routers/s3.router.js');
 app.use('/', router);
