@@ -7,9 +7,16 @@ const nodemailer = require('nodemailer');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+const whitelist = ['https://dev-t3kskspy.auth0.com', 'https://service.zhenglyu.com','http://localhost:4200']
 const cors = require('cors')
 const corsOptions = {
-  origin: 'https://scaas.ahatis.com',
+  origin:(origin,callback)=>{
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
   optionsSuccessStatus: 200
 }
 app.use(cors(corsOptions))
@@ -22,12 +29,12 @@ const uri = "mongodb+srv://Jim:$Zyf1989528@scheduledb-2yn2v.mongodb.net/test?ret
 const client = new MongoClient(uri, { useNewUrlParser: true });
 client.connect(err => {
   const collection = client.db("test").collection("devices");
-  // let myObj = {name:"Joey"};
+  let myObj = {name:"Joey"};
   // collection.insertOne(myObj,(err,res)=>{
   //     console.log('success');
   // })
 
-  const server = app.listen(3000, function () {
+  const server = app.listen(8080, function () {
  
     let host = server.address().address
     let port = server.address().port
@@ -38,8 +45,35 @@ client.connect(err => {
   app.get('/',(req,res)=>{
     res.send('hihihi');
   })
-  
 
+  app.post("/api/signupemail",(req,res)=>{
+    if(err){
+      consol.log(err);
+    }
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'jimlyu1573@gmail.com',
+        pass: 'ZLfc1993419'
+      }
+    });
+
+    var mailOptions = {
+      from: 'jimlyu1573@gmail.com',
+      to: 'zhenglyu@bu.edu',
+      subject: 'You have a new appointment from ',
+      text: JSON.stringify(req.body)
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+  });
+  
   app.get("/api/schedules",(req,res)=>{
     collection.find({}).toArray((err,docs)=>{
       if(err){
@@ -91,6 +125,8 @@ client.connect(err => {
     let message = req.body;
     console.log(message);
   });
+
+  
 
 
   });
